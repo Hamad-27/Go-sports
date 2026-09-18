@@ -381,6 +381,85 @@
   @media (max-width:640px){
     .modal-stats{grid-template-columns:repeat(2,1fr);}
   }
+  .live-matches {
+  margin: 30px auto;
+  max-width: 1100px;
+  padding: 20px;
+}
+
+.live-matches h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#liveMatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.match-card {
+  background: linear-gradient(145deg, #10251d, #07130f);
+  border: 1px solid #2e6b4f;
+  border-radius: 18px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s;
+}
+
+.match-card:hover {
+  transform: translateY(-4px);
+}
+
+.match-sport {
+  color: #f5c542;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.match-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.match-team {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.match-score {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f5c542;
+}
+
+.match-status {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.live-badge {
+  display: inline-block;
+  background: #d62828;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.finished-badge {
+  color: #aaa;
+}
+
+.upcoming-badge {
+  color: #72d6a0;
+}
 </style>
 </head>
 <body>
