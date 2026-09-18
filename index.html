@@ -1,1 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoSport — Every Sport, Every Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch:#0F2E1D;
+    --pitch-dark:#0A2016;
+    --ink:#12181A;
+    --gold:#E8B923;
+    --gold-dim:#B88F1A;
+    --paper:#F2EFE7;
+    --paper-dim:#E4DFD0;
+    --teal:#2C6E63;
+    --line: rgba(242,239,231,0.14);
+    --line-dark: rgba(18,24,26,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    letter-spacing:0.01em;
+    margin:0;
+  }
+  img,svg{max-width:100%;}
+  a{color:inherit;}
+  button{font-family:inherit;}
 
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(232,185,35,0.18), transparent 60%),
+      linear-gradient(180deg, var(--pitch) 0%, var(--pitch-dark) 100%);
+    color:var(--paper);
+    padding: 56px 24px 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(242,239,231,0.05) 0, rgba(242,239,231,0.05) 1px, transparent 1px, transparent 64px);
+    pointer-events:none;
+  }
+  .hero-inner{
+    max-width:1120px;
+    margin:0 auto;
+    position:relative;
+  }
+  .eyebrow-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold);
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:18px;
+  }
+  .eyebrow-row .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  .hero h1{
+    font-size: clamp(42px, 7vw, 84px);
+    line-height:0.98;
+    font-weight:700;
+    color:var(--paper);
+  }
+  .hero h1 span{color:var(--gold);}
+  .hero p.lede{
+    max-width:560px;
+    font-size:18px;
+    line-height:1.55;
+    color:rgba(242,239,231,0.82);
+    margin-top:18px;
+  }
+  .stat-row{
+    display:flex;
+    gap:36px;
+    margin-top:36px;
+    flex-wrap:wrap;
+  }
+  .stat-row .stat b{
+    display:block;
+    font-family:'Oswald', sans-serif;
+    font-size:32px;
+    color:var(--gold);
+  }
+  .stat-row .stat span{
+    font-size:13px;
+    color:rgba(242,239,231,0.65);
+  }
+
+  .search-wrap{
+    margin-top:40px;
+    max-width:640px;
+  }
+  .search-box{
+    display:flex;
+    align-items:center;
+    background:rgba(242,239,231,0.08);
+    border:1px solid rgba(242,239,231,0.25);
+    border-radius:8px;
+    padding:4px 4px 4px 16px;
+  }
+  .search-box svg{flex-shrink:0;opacity:0.6;}
+  .search-box input{
+    flex:1;
+    background:transparent;
+    border:0;
+    outline:0;
+    color:var(--paper);
+    font-size:16px;
+    padding:12px 8px;
+    font-family:'Work Sans', sans-serif;
+  }
+  .search-box input::placeholder{color:rgba(242,239,231,0.45);}
+  .search-box button{
+    background:var(--gold);
+    color:var(--pitch-dark);
+    border:0;
+    border-radius:6px;
+    padding:10px 20px;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .search-box button:hover{background:#f2c53c;}
+
+  /* ---------- SPORT TABS ---------- */
+  .tabs-section{
+    background:var(--pitch-dark);
+    border-top:1px solid var(--line);
+    padding:0 24px;
+  }
+  .tabs{
+    max-width:1120px;
+    margin:0 auto;
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex-shrink:0;
+    background:transparent;
+    border:0;
+    color:rgba(242,239,231,0.55);
+    padding:16px 18px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition: color .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .tab .ico{font-size:16px;}
+  .tab:hover{color:var(--paper);}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+  /* ---------- MAIN ---------- */
+  main{
+    max-width:1120px;
+    margin:0 auto;
+    padding:44px 24px 80px;
+  }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:24px;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-size:28px;
+    font-weight:600;
+  }
+  .count-pill{
+    font-size:13px;
+    color:#5b6660;
+    border:1px solid var(--line-dark);
+    padding:4px 12px;
+    border-radius:999px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap:18px;
+  }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line-dark);
+    border-radius:10px;
+    padding:0;
+    cursor:pointer;
+    overflow:hidden;
+    transition: transform .15s ease, box-shadow .15s ease;
+    text-align:left;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow: 0 10px 24px rgba(15,46,29,0.12);
+  }
+  .card-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:18px 18px 14px;
+    border-bottom:1px solid var(--paper-dim);
+  }
+  .avatar{
+    width:52px;height:52px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--teal), var(--pitch));
+    color:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .card-name{
+    font-family:'Oswald', sans-serif;
+    font-size:18px;
+    font-weight:600;
+    line-height:1.1;
+  }
+  .card-role{
+    font-size:13px;
+    color:#5b6660;
+    margin-top:2px;
+  }
+  .card-body{
+    padding:14px 18px 18px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+  }
+  .mini-stat{
+    display:flex;
+    flex-direction:column;
+  }
+  .mini-stat b{
+    font-family:'Oswald', sans-serif;
+    font-size:17px;
+  }
+  .mini-stat span{
+    font-size:11.5px;
+    color:#5b6660;
+  }
+  .flag{
+    font-size:12px;
+    color:var(--teal);
+    font-weight:600;
+    padding:2px 8px;
+    background:rgba(44,110,99,0.1);
+    border-radius:999px;
+    margin-left:auto;
+  }
+
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:#5b6660;
+  }
+  .empty b{display:block;font-family:'Oswald',sans-serif;font-size:20px;color:var(--ink);margin-bottom:6px;}
+
+  /* ---------- MODAL ---------- */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(10,32,22,0.55);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 16px;
+    z-index:50;
+    overflow-y:auto;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    background:#fff;
+    max-width:560px;
+    width:100%;
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:20px;
+  }
+  .modal-head{
+    background:linear-gradient(135deg, var(--pitch), var(--teal));
+    color:var(--paper);
+    padding:28px 26px;
+    display:flex;
+    gap:18px;
+    align-items:center;
+    position:relative;
+  }
+  .modal-close{
+    position:absolute;
+    top:14px;right:14px;
+    background:rgba(255,255,255,0.15);
+    border:0;
+    color:var(--paper);
+    width:30px;height:30px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+  }
+  .modal-avatar{
+    width:64px;height:64px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;
+    font-size:22px;
+    font-weight:600;
+    flex-shrink:0;
+  }
+  .modal-head h3{font-size:24px;font-weight:600;}
+  .modal-head p{margin:4px 0 0;font-size:14px;color:rgba(242,239,231,0.85);}
+  .modal-body{padding:24px 26px 28px;}
+  .modal-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .modal-stats .ms{
+    background:var(--paper);
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+  }
+  .modal-stats .ms b{
+    display:block;
+    font-family:'Oswald',sans-serif;
+    font-size:20px;
+    color:var(--pitch);
+  }
+  .modal-stats .ms span{font-size:11.5px;color:#5b6660;}
+  .modal-bio{font-size:14.5px;line-height:1.6;color:#33403a;}
+  .modal-meta{
+    display:flex;flex-wrap:wrap;gap:8px;
+    margin-top:18px;
+  }
+  .modal-meta span{
+    font-size:12px;
+    padding:5px 10px;
+    border-radius:999px;
+    background:rgba(44,110,99,0.1);
+    color:var(--teal);
+    font-weight:600;
+  }
+
+  footer{
+    background:var(--pitch-dark);
+    color:rgba(242,239,231,0.6);
+    text-align:center;
+    padding:26px 16px;
+    font-size:13px;
+  }
+
+  @media (max-width:640px){
+    .modal-stats{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow-row"><span class="dot"></span>Multi-sport player directory</div>
+    <h1>Every sport.<br>Every <span>player</span>.</h1>
+    <p class="lede">Browse profiles, stats and career details for athletes across football, cricket, basketball and tennis — all in one place.</p>
+
+    <div class="stat-row">
+      <div class="stat"><b id="statSports">4</b><span>Sports covered</span></div>
+      <div class="stat"><b id="statPlayers">0</b><span>Player profiles</span></div>
+      <div class="stat"><b id="statCountries">0</b><span>Countries</span></div>
+    </div>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="searchInput" type="text" placeholder="Search a player, team or country…">
+        <button onclick="renderPlayers()">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-section">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<main>
+  <div class="section-head">
+    <h2 id="sectionTitle">All players</h2>
+    <span class="count-pill" id="resultCount">0 results</span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState" style="display:none;">
+    <b>No players match that search</b>
+    Try a different name, team or country.
+  </div>
+</main>
+
+<footer>GoSport — a sample player directory. Data shown is illustrative, not live.</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const DATA = {
+  football: {
+    label: "Football",
+    icon: "⚽",
+    roleLabel: "Position",
+    players: [
+      {name:"Marco Silveira", team:"Porto Marítimo", country:"Brazil", role:"Striker", age:27, apps:214, goals:168, assists:41, bio:"A clinical finisher known for his movement in the box and composure one-on-one with the goalkeeper. Rose through Porto Marítimo's youth academy before becoming club captain at 24."},
+      {name:"Dean Ashworth", team:"Northbridge United", country:"England", role:"Centre-back", age:29, apps:301, goals:14, assists:9, bio:"A dominant aerial presence and reads the game a step ahead of most defenders. Known for long, accurate diagonal passes that start attacks from the back."},
+      {name:"Kwame Boateng", team:"Lagoon City FC", country:"Ghana", role:"Winger", age:23, apps:96, goals:38, assists:52, bio:"Explosive pace down the right flank with a knack for cutting inside onto his stronger foot. One of the league's most-fouled players two seasons running."},
+      {name:"Julen Etxeberria", team:"Rioja Atlético", country:"Spain", role:"Midfielder", age:26, apps:188, goals:22, assists:64, bio:"The metronome of his side's midfield, averaging over 90 passes a match with a completion rate rarely below 90%."},
+      {name:"Tomasz Wybicki", team:"Vistula Sports Club", country:"Poland", role:"Goalkeeper", age:31, apps:255, goals:0, assists:2, bio:"Renowned shot-stopper with quick reflexes and strong command of his box on set pieces. Holder of his club's clean-sheet record."},
+      {name:"Idris Al-Farouk", team:"Desert Falcons", country:"Morocco", role:"Full-back", age:25, apps:142, goals:6, assists:33, bio:"Modern attacking full-back who doubles as an auxiliary winger, contributing heavily to chance creation from wide areas."}
+    ]
+  },
+  cricket: {
+    label: "Cricket",
+    icon: "🏏",
+    roleLabel: "Role",
+    players: [
+      {name:"Arjun Malhotra", team:"Coastal Strikers", country:"India", role:"Batsman", age:28, apps:142, goals:5820, assists:38, statLabel:["Matches","Runs","50s/100s"], bio:"An elegant top-order batsman with a strike rate that has redefined how his team approaches the powerplay. Known for his cover drive."},
+      {name:"Liam Fitzgerald", team:"Southport Sabres", country:"Australia", role:"Fast bowler", age:26, apps:98, goals:187, assists:4, statLabel:["Matches","Wickets","5-wicket hauls"], bio:"Genuine pace bowler who consistently touches speeds above 145 km/h, with a lethal yorker in the death overs."},
+      {name:"Kusal Peris", team:"Island Warriors", country:"Sri Lanka", role:"All-rounder", age:24, apps:76, goals:1890, assists:63, statLabel:["Matches","Runs","Wickets"], bio:"A genuine all-rounder capable of batting in the top five and bowling tight overs of off-spin under pressure."},
+      {name:"Shaun Petersen", team:"Cape Coast Titans", country:"South Africa", role:"Wicketkeeper", age:30, apps:165, goals:212, assists:24, statLabel:["Matches","Dismissals","Stumpings"], bio:"Reliable gloveman with sharp reflexes standing up to spin, and a handy lower-order batsman in tight run chases."},
+      {name:"Rehan Qureshi", team:"Northern Lions", country:"Pakistan", role:"Spinner", age:29, apps:110, goals:203, assists:6, statLabel:["Matches","Wickets","Economy"], bio:"Crafty leg-spinner who relies on variations and flight rather than raw pace, often the go-to bowler in the middle overs."},
+      {name:"Ben Whitlock", team:"Harborview Hawks", country:"England", role:"Batsman", age:31, apps:178, goals:6410, assists:27, statLabel:["Matches","Runs","Centuries"], bio:"Steady middle-order anchor known for building long innings and rotating strike under pressure situations."}
+    ]
+  },
+  basketball: {
+    label: "Basketball",
+    icon: "🏀",
+    roleLabel: "Position",
+    players: [
+      {name:"Trey Jamison", team:"Riverside Rockets", country:"USA", role:"Point Guard", age:25, apps:310, goals:18, assists:9, statLabel:["Games","PPG","APG"], bio:"A floor general with elite court vision, routinely leading the league in assists while managing tempo late in games."},
+      {name:"Milo Andersson", team:"Nordic Flames", country:"Sweden", role:"Center", age:28, apps:265, goals:16, assists:2, statLabel:["Games","PPG","RPG"], bio:"A rim protector who anchors his team's defense, combining shot-blocking with an increasingly reliable mid-range jumper."},
+      {name:"Darnell Osei", team:"Metro Hawks", country:"USA", role:"Shooting Guard", age:24, apps:198, goals:22, assists:4, statLabel:["Games","PPG","3P%"], bio:"A high-volume scorer with a quick release from three-point range, often finishing among the league's top scorers."},
+      {name:"Luka Petrović", team:"Adria Vipers", country:"Serbia", role:"Small Forward", age:27, apps:240, goals:19, assists:6, statLabel:["Games","PPG","RPG"], bio:"Versatile wing scorer who can create his own shot or play off the ball, with a growing reputation as a clutch performer."},
+      {name:"Jamal Whitaker", team:"Bayline Ballers", country:"Canada", role:"Power Forward", age:26, apps:220, goals:15, assists:3, statLabel:["Games","PPG","RPG"], bio:"An undersized four who compensates with relentless effort on the boards and a soft touch around the rim."}
+    ]
+  },
+  tennis: {
+    label: "Tennis",
+    icon: "🎾",
+    roleLabel: "Plays",
+    players: [
+      {name:"Elena Marchetti", team:"—", country:"Italy", role:"Right-handed", age:24, apps:52, goals:11, assists:0, statLabel:["Titles","Win %","Ranking"], bio:"An aggressive baseliner with one of the tour's biggest forehands, breaking into the top ten after a career-best season."},
+      {name:"Noah Kristiansen", team:"—", country:"Norway", role:"Left-handed", age:22, apps:31, goals:4, assists:0, statLabel:["Titles","Win %","Ranking"], bio:"A rising serve-and-volley specialist whose lefty spin gives opponents fits on grass and fast hard courts."},
+      {name:"Hana Sato", team:"—", country:"Japan", role:"Right-handed", age:27, apps:78, goals:15, assists:0, statLabel:["Titles","Win %","Ranking"], bio:"Known for elite movement and defensive retrieving, grinding out long rallies that wear opponents down mentally."},
+      {name:"Diego Fuentes", team:"—", country:"Argentina", role:"Right-handed", age:29, apps:96, goals:22, assists:0, statLabel:["Titles","Win %","Ranking"], bio:"A clay-court specialist with heavy topspin, twice a finalist at his home country's biggest tournament."}
+    ]
+  }
+};
+
+let activeSport = "all";
+
+function buildTabs(){
+  const tabs = document.getElementById('tabs');
+  const all = document.createElement('button');
+  all.className = 'tab active';
+  all.dataset.sport = 'all';
+  all.innerHTML = '<span class="ico">🏆</span> All sports';
+  all.onclick = () => selectTab('all');
+  tabs.appendChild(all);
+
+  Object.keys(DATA).forEach(key => {
+    const s = DATA[key];
+    const btn = document.createElement('button');
+    btn.className = 'tab';
+    btn.dataset.sport = key;
+    btn.innerHTML = `<span class="ico">${s.icon}</span> ${s.label}`;
+    btn.onclick = () => selectTab(key);
+    tabs.appendChild(btn);
+  });
+}
+
+function selectTab(key){
+  activeSport = key;
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.sport === key);
+  });
+  document.getElementById('sectionTitle').textContent = key === 'all' ? 'All players' : DATA[key].label + ' players';
+  renderPlayers();
+}
+
+function initials(name){
+  return name.split(' ').map(p => p[0]).slice(0,2).join('').toUpperCase();
+}
+
+function getAllPlayers(){
+  let list = [];
+  Object.keys(DATA).forEach(key => {
+    DATA[key].players.forEach(p => list.push({...p, sport:key}));
+  });
+  return list;
+}
+
+function renderPlayers(){
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = activeSport === 'all' ? getAllPlayers() : DATA[activeSport].players.map(p => ({...p, sport:activeSport}));
+
+  if(query){
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(query) ||
+      p.team.toLowerCase().includes(query) ||
+      p.country.toLowerCase().includes(query)
+    );
+  }
+
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('emptyState');
+  grid.innerHTML = '';
+
+  document.getElementById('resultCount').textContent = `${list.length} result${list.length !== 1 ? 's' : ''}`;
+
+  if(list.length === 0){
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.forEach((p, idx) => {
+    const sport = DATA[p.sport];
+    const labels = p.statLabel || ["Matches","Goals","Assists"];
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.onclick = () => openModal(p);
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="avatar">${initials(p.name)}</div>
+        <div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-role">${sport.icon} ${p.role} · ${p.team}</div>
+        </div>
+        <div class="flag">${p.country}</div>
+      </div>
+      <div class="card-body">
+        <div class="mini-stat"><b>${p.apps}</b><span>${labels[0]}</span></div>
+        <div class="mini-stat"><b>${p.goals}</b><span>${labels[1]}</span></div>
+        <div class="mini-stat"><b>${p.assists}</b><span>${labels[2]}</span></div>
+        <div class="mini-stat"><b>${p.age}</b><span>Age</span></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openModal(p){
+  const sport = DATA[p.sport];
+  const labe
