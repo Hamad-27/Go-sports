@@ -575,6 +575,108 @@ function renderPlayers(){
   });
 }
 
+  
 function openModal(p){
   const sport = DATA[p.sport];
-  const labe
+  const labels = p.statLabel || ["Matches","Goals","Assists"];
+
+  const modal = document.getElementById('modal');
+
+  modal.innerHTML = `
+    <div class="modal-head">
+      <button class="modal-close" onclick="closeModal()">×</button>
+
+      <div class="modal-avatar">
+        ${initials(p.name)}
+      </div>
+
+      <div>
+        <h3>${p.name}</h3>
+        <p>${sport.icon} ${sport.label} · ${p.role}</p>
+      </div>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-stats">
+        <div class="ms">
+          <b>${p.apps}</b>
+          <span>${labels[0]}</span>
+        </div>
+
+        <div class="ms">
+          <b>${p.goals}</b>
+          <span>${labels[1]}</span>
+        </div>
+
+        <div class="ms">
+          <b>${p.assists}</b>
+          <span>${labels[2]}</span>
+        </div>
+
+        <div class="ms">
+          <b>${p.age}</b>
+          <span>Age</span>
+        </div>
+
+        <div class="ms">
+          <b>${p.country}</b>
+          <span>Country</span>
+        </div>
+
+        <div class="ms">
+          <b>${sport.label}</b>
+          <span>Sport</span>
+        </div>
+      </div>
+
+      <p class="modal-bio">${p.bio}</p>
+
+      <div class="modal-meta">
+        <span>${p.country}</span>
+        <span>${p.team}</span>
+        <span>${p.role}</span>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+}
+
+document.getElementById('overlay').addEventListener('click', function(e){
+  if(e.target === this){
+    closeModal();
+  }
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    closeModal();
+  }
+});
+
+document.getElementById('searchInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    renderPlayers();
+  }
+});
+
+buildTabs();
+renderPlayers();
+
+document.getElementById('statPlayers').textContent = getAllPlayers().length;
+
+const countries = new Set(
+  getAllPlayers().map(p => p.country)
+);
+
+document.getElementById('statCountries').textContent = countries.size;
+</script>
+
+</body>
+</html>
