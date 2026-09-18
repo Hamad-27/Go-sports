@@ -9,7 +9,7 @@ async function loadLiveSports() {
       const response = await fetch(url);
       const data = await response.json();
 
-      console.log(sport, data.matches);
+      displayMatches(data.matches);
     } catch (error) {
       console.error("Error loading " + sport + ":", error);
     }
