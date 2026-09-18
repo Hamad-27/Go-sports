@@ -1,72 +1,68 @@
 console.log("GoSport sports.js is running!");
+
 const SPORTS = ["football", "cricket", "basketball", "tennis"];
+
+async function getMatches(sport) {
+  const url =
+    `https://sportscore.com/api/widget/matches/?sport=${sport}&limit=10`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("API error: " + response.status);
+  }
+
+  return await response.json();
+}
 
 async function loadLiveSports() {
   const box = document.getElementById("liveMatches");
 
   if (!box) return;
 
-  box.innerHTML = "<p>Loading matches...</p>";
+  box.innerHTML = "<p>🔄 Loading matches...</p>";
 
-  let allMatches = [];
+  try {
+    const results = await Promise.all(
+      SPORTS.map(sport => getMatches(sport))
+    );
 
-  for (const sport of SPORTS) {
-    try {
-      const url =
-        `https://sportscore.com/api/widget/matches/?sport=${sport}&limit=20`;
+    let allMatches = [];
 
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.matches) {
-        allMatches = allMatches.concat(
-          data.matches.map(match => ({
+    results.forEach((data, index) => {
+      if (data && Array.isArray(data.matches)) {
+        allMatches.push(
+          ...data.matches.map(match => ({
             ...match,
-            sport: sport
+            sport: SPORTS[index]
           }))
         );
       }
-    } catch (error) {
-      console.error("Error loading " + sport, error);
-    }
-  }
+    });
 
-  displayMatches(allMatches);
+    displayMatches(allMatches);
+
+  } catch (error) {
+    console.error("GoSport error:", error);
+
+    box.innerHTML = `
+      <div class="match-card">
+        <h3>⚠️ Matches could not load</h3>
+        <p>Please refresh the page and try again.</p>
+      </div>
+    `;
+  }
 }
 
 function displayMatches(matches) {
   const box = document.getElementById("liveMatches");
 
-  if (!matches || matches.length === 0) {
+  if (!matches.length) {
     box.innerHTML = "<p>No matches available right now.</p>";
     return;
   }
 
   box.innerHTML = matches.map(match => {
-    const status = String(
-      match.status ||
-      match.match_status ||
-      match.state ||
-      ""
-    ).toLowerCase();
-
-    let statusHTML = "";
-
-    if (
-      status.includes("live") ||
-      status.includes("playing") ||
-      status.includes("progress")
-    ) {
-      statusHTML = `<span class="live-badge">🔴 LIVE</span>`;
-    } else if (
-      status.includes("finished") ||
-      status.includes("ended") ||
-      status.includes("final")
-    ) {
-      statusHTML = `<span class="finished-badge">✓ FINISHED</span>`;
-    } else {
-      statusHTML = `<span class="upcoming-badge">UPCOMING</span>`;
-    }
 
     const home =
       match.home_team ||
@@ -94,6 +90,29 @@ function displayMatches(matches) {
       match.scores?.away ??
       "-";
 
+    const status = String(
+      match.status ||
+      match.match_status ||
+      match.state ||
+      ""
+    ).toLowerCase();
+
+    let statusHTML = "UPCOMING";
+
+    if (
+      status.includes("live") ||
+      status.includes("playing") ||
+      status.includes("progress")
+    ) {
+      statusHTML = '<span class="live-badge">🔴 LIVE</span>';
+    } else if (
+      status.includes("finished") ||
+      status.includes("ended") ||
+      status.includes("final")
+    ) {
+      statusHTML = '<span class="finished-badge">✓ FINISHED</span>';
+    }
+
     return `
       <div class="match-card">
 
@@ -104,7 +123,7 @@ function displayMatches(matches) {
         <div class="match-teams">
 
           <div class="match-team">
-            🏟️ ${home}
+            ${home}
           </div>
 
           <div class="match-score">
@@ -112,7 +131,7 @@ function displayMatches(matches) {
           </div>
 
           <div class="match-team">
-            🏟️ ${away}
+            ${away}
           </div>
 
         </div>
@@ -123,21 +142,8 @@ function displayMatches(matches) {
 
       </div>
     `;
-  }).join("");
-}
 
-  box.innerHTML = matches.map(match => `
-    <div class="match-card">
-      <small>🏆 ${match.sport.toUpperCase()}</small>
-      <div>
-        <strong>${match.home_team || "Home"}</strong>
-        <span>
-          ${match.home_score ?? "-"} : ${match.away_score ?? "-"}
-        </span>
-        <strong>${match.away_team || "Away"}</strong>
-      </div>
-    </div>
-  `).join("");
+  }).join("");
 }
 
 loadLiveSports();
