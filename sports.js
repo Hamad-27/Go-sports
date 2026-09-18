@@ -1,3 +1,4 @@
+console.log("GoSport sports.js is running!");
 const SPORTS = ["football", "cricket", "basketball", "tennis"];
 
 async function loadLiveSports() {
