@@ -57,60 +57,42 @@ async function loadLiveSports() {
 function displayMatches(matches) {
   const box = document.getElementById("liveMatches");
 
-  if (!matches.length) {
+  if (!matches || matches.length === 0) {
     box.innerHTML = "<p>No matches available right now.</p>";
     return;
   }
 
   box.innerHTML = matches.map(match => {
 
-    const home =
-      match.home_team ||
-      match.homeTeam ||
-      match.home?.name ||
-      match.teams?.home?.name ||
-      "Home Team";
+    const home = match.home?.name || "Home Team";
+    const away = match.away?.name || "Away Team";
 
-    const away =
-      match.away_team ||
-      match.awayTeam ||
-      match.away?.name ||
-      match.teams?.away?.name ||
-      "Away Team";
+    const homeLogo = match.home?.logo || "";
+    const awayLogo = match.away?.logo || "";
 
-    const homeScore =
-      match.home_score ??
-      match.homeScore ??
-      match.scores?.home ??
-      "-";
-
-    const awayScore =
-      match.away_score ??
-      match.awayScore ??
-      match.scores?.away ??
-      "-";
+    const homeScore = match.home?.score ?? "-";
+    const awayScore = match.away?.score ?? "-";
 
     const status = String(
-      match.status ||
-      match.match_status ||
-      match.state ||
-      ""
+      match.status || ""
     ).toLowerCase();
 
-    let statusHTML = "UPCOMING";
+    let statusHTML = `<span class="upcoming-badge">UPCOMING</span>`;
 
     if (
       status.includes("live") ||
       status.includes("playing") ||
       status.includes("progress")
     ) {
-      statusHTML = '<span class="live-badge">🔴 LIVE</span>';
-    } else if (
+      statusHTML = `<span class="live-badge">🔴 LIVE</span>`;
+    }
+
+    if (
       status.includes("finished") ||
       status.includes("ended") ||
       status.includes("final")
     ) {
-      statusHTML = '<span class="finished-badge">✓ FINISHED</span>';
+      statusHTML = `<span class="finished-badge">✓ FINISHED</span>`;
     }
 
     return `
@@ -123,7 +105,8 @@ function displayMatches(matches) {
         <div class="match-teams">
 
           <div class="match-team">
-            ${home}
+            ${homeLogo ? `<img src="${homeLogo}" alt="${home}" width="50">` : ""}
+            <div>${home}</div>
           </div>
 
           <div class="match-score">
@@ -131,7 +114,8 @@ function displayMatches(matches) {
           </div>
 
           <div class="match-team">
-            ${away}
+            ${awayLogo ? `<img src="${awayLogo}" alt="${away}" width="50">` : ""}
+            <div>${away}</div>
           </div>
 
         </div>
@@ -145,7 +129,3 @@ function displayMatches(matches) {
 
   }).join("");
 }
-
-loadLiveSports();
-
-setInterval(loadLiveSports, 60000);
